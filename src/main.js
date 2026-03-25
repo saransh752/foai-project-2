@@ -16,10 +16,7 @@ const chatHistoryListEl = document.getElementById('chatHistoryList')
 const sidebarToggleBtn = document.getElementById('sidebarToggle')
 const sidebarEl = document.getElementById('sidebar')
 // IMPORTANT:
-// - These keys will live in the frontend bundle. Use course-provided keys or
-//   restrict keys (if your provider allows) to limit abuse.
-// - Configure them using .env with Vite.
-const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY
+// - HF_TOKEN will live in the frontend bundle. Provide keys restricting usage or move to an API route similarly.
 const HF_TOKEN = import.meta.env.VITE_HF_TOKEN
 
 const OPENROUTER_MODEL =
@@ -37,7 +34,6 @@ imageModelNameEl.textContent = HF_IMAGE_MODEL
 
 function ensureConfigured() {
   const missing = []
-  if (!OPENROUTER_API_KEY) missing.push('VITE_OPENROUTER_API_KEY')
   if (!HF_TOKEN) missing.push('VITE_HF_TOKEN')
   if (missing.length) {
     throw new Error(
@@ -47,11 +43,7 @@ function ensureConfigured() {
 }
 
 function ensureOpenRouterConfigured() {
-  const missing = []
-  if (!OPENROUTER_API_KEY) missing.push('VITE_OPENROUTER_API_KEY')
-  if (missing.length) {
-    throw new Error(`Missing environment variables: ${missing.join(', ')}`)
-  }
+  // Config is now checked server-side
 }
 
 function ensureHFConfigured() {
@@ -169,9 +161,8 @@ async function queryOpenRouter(userText) {
     messages,
   }
 
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  const response = await fetch('/api/chat', {
     headers: {
-      Authorization: `Bearer ${OPENROUTER_API_KEY}`,
       'Content-Type': 'application/json',
     },
     method: 'POST',
@@ -180,9 +171,9 @@ async function queryOpenRouter(userText) {
   })
 
   if (!response.ok) {
-    const text = await response.text().catch(() => '')
+    const errorData = await response.json().catch(() => ({}));
     throw new Error(
-      `OpenRouter error (${response.status}): ${text || 'No details'}`
+      errorData.error || `Server error (${response.status})`
     )
   }
 
