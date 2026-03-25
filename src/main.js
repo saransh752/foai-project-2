@@ -89,7 +89,7 @@ function loadSessions() {
     }
   }
   if (sessions.length === 0) {
-    createNewSession(false)
+    createNewSession(true)
   } else {
     // switch to the most recently updated session
     sessions.sort((a, b) => b.updatedAt - a.updatedAt)
