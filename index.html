@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FOAI Project 2 - Chat + Image</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar for Chat History -->
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+          <button id="newChatBtn" class="new-chat-btn">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            New Chat
+          </button>
+        </div>
+        <div class="history-list-container">
+          <ul id="chatHistoryList" class="history-list">
+            <!-- Chat history items will be rendered here -->
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="page main-content">
+        <header class="header">
+          <div class="header-top">
+            <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+              <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+            <h1>Chatbot + Text-to-Image</h1>
+          </div>
+          <p class="subtle">
+            Text uses OpenRouter chat completions. Images use Hugging Face diffusion endpoint.
+          </p>
+        </header>
+
+        <section class="grid">
+          <div class="card chat-card">
+            <h2>Chat (Separate input)</h2>
+
+            <div id="chatMessages" class="messages" aria-live="polite"></div>
+
+            <div id="chatTyping" class="typing hidden" aria-hidden="true">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="typingLabel">Assistant is typing…</span>
+            </div>
+
+            <form id="chatForm" class="inputRow" autocomplete="off">
+              <input
+                id="chatInput"
+                type="text"
+                placeholder="Type your message..."
+                maxlength="2000"
+                required
+              />
+              <button id="chatSend" type="submit">Send</button>
+            </form>
+
+            <div class="hint">
+              Model: <span id="chatModelName" class="mono"></span>
+            </div>
+          </div>
+
+          <div class="card image-card">
+            <h2>Generate Image (Separate input)</h2>
+
+            <div class="inputRow">
+              <input
+                id="imagePrompt"
+                type="text"
+                placeholder="Describe the image you want..."
+                maxlength="2000"
+                required
+              />
+              <button id="imageGenerate" type="button">Generate Image</button>
+            </div>
+
+            <div id="imageStatus" class="status subtle hidden">Generating…</div>
+
+            <div class="imageWrap">
+              <img id="imageOutput" alt="Generated result will appear here" />
+            </div>
+
+            <div class="hint">
+              Image model: <span id="imageModelName" class="mono"></span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+
